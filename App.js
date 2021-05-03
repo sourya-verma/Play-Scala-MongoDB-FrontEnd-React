@@ -1,38 +1,29 @@
-import React, { useState } from 'react'
-import Error from './Error'
-import { Route, Switch } from "react-router-dom";
-import Student from './Student';
-import University from './University';
-import Main from './Main';
+import React, { useState, useEffect } from 'react'
+import Cookies from 'js-cookie'
+import { BrowserRouter } from "react-router-dom";
+import Routes from './Routes';
 import './index.css'
-import StudentSearchByName from './StudentSearchByName';
-import UniversitySearchByName from './UniversitySearchByName';
-import StudentJoinUniversity from './StudentJoinUniversity'
+import AuthApi from './AuthApi'
 const App = () => {
-    const [view, setView] = useState(false)
-    const [userName, setName] = useState("")
-    const handleLogin = () => setView(true)
-    const handleLogout = () => setView(false)
-    const changeName = (a) => setName(a)
+    const [auth,setAuth]= useState(false);
+    const readCookie = ()=>{
+        const user = Cookies.get("token")
+        if(user){
+            setAuth(true);
+        }
+    }
+    useEffect(()=>{
+        readCookie();
+    },[])
     
-
     return (
         <>
-            <Main/>
-            
-            <Switch>
-
-                <Route exact path="/" component={() => <Student/>} />
-                <Route exact path="/student" component={() => <Student/>} />
-                <Route exact path="/university/" component={() => <University/>} />
-                <Route exact path="/studentsearchby" component={() => <StudentSearchByName/>} />
-                <Route exact path="/universitysearchby" component={() => <UniversitySearchByName/>} />
-                <Route exact path="/studentjoinuniversity" component={() => <StudentJoinUniversity/>} />
-                <Route component={Error} />
-            </Switch>
-
+            <AuthApi.Provider value={{auth,setAuth }}>
+                <BrowserRouter>
+                    <Routes />
+                </BrowserRouter>
+            </AuthApi.Provider>
         </>
-
     )
 }
 export default App;

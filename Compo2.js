@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import Cookies from 'js-cookie'
 import { Grid, Paper, Avatar, TextField, Button, Typography, Link, Toolbar } from '@material-ui/core'
 
 export default function Compo2() {
@@ -16,8 +17,9 @@ export default function Compo2() {
     const buttonStyle = { margin: '8px 0' }
     const [name, setName] = useState("")
     const [list, setList] = useState([])
+    const token = Cookies.get('token')
     async function getData() {
-        const allData = await axios.get(`http://localhost:9000/university/countstudent`)
+        const allData = await axios.get(`http://localhost:9000/university/countstudent`,{ headers: {"Authorization" : `Bearer ${token}`}})
         // console.log(allData.data)
         setList(allData.data)
         console.log(allData.data)

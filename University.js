@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useContext } from 'react';
 import axios from 'axios'
 import "bootstrap/dist/css/bootstrap.css";
+import AuthApi from './AuthApi'
 import AddUniversityForm from './AddUniversityForm';
 import { Redirect, useHistory } from 'react-router-dom';
+import Cookies from 'js-cookie'
 const University = () => {
   const his = useHistory()
+
+  const Auth = useContext(AuthApi)
   const [_id, setId] = useState(0);
   const [universityName, setUniversityName] = useState("");
   const [location, setLocation] = useState("");
@@ -12,7 +16,13 @@ const University = () => {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  
+  const token = Cookies.get('token')
+  if (!token) {
+    
+
+    his.push('./');
+    // <Redirect to = './' />
+  }
 
   useEffect(() => {
     getData();
@@ -23,7 +33,8 @@ const University = () => {
   }
 
   async function getData() {
-    const allData = await axios.get(`http://localhost:9000/university/list`)
+    const token = Cookies.get('token')
+    const allData = await axios.get(`http://localhost:9000/university/list`,{ headers: {"Authorization" : `Bearer ${token}`}})
     console.log(allData.data)
     setUniversity(allData.data);
   }
@@ -69,6 +80,9 @@ const University = () => {
       try {
         await fetch(`http://localhost:9000/university/delete/${t}`, {
           method: 'delete',
+          headers:{
+            "Authorization" : `Bearer ${token}`
+          }
         });
 
       }
@@ -90,6 +104,7 @@ const University = () => {
         await fetch('http://localhost:9000/university/update', {
           method: 'put',
           headers: {
+            "Authorization" : `Bearer ${token}`, 
             'Accept': 'application/json',
             'Content-type': 'application/json'
           },

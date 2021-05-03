@@ -46,11 +46,11 @@ export default function LoginPage() {
                             'Accept': 'application/json',
                             'Content-type': 'application/json'
                         },
-                        body: JSON.stringify({"firstName": `${fname}`, "lastName": `${lname}`, "userID": username,"password":`${pass}`,"createdDate":parseInt(Date.now())})
+                        body: JSON.stringify({"firstName": `${fname}`, "lastName": `${lname}`, "_id": parseInt(username),"password":`${pass}`})
 
                     });
                     alert('successful')
-                his.push('./login')
+                his.push('./')
 
                 }
                 catch (e) {

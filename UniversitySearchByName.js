@@ -6,6 +6,7 @@ import { Grid, Paper, Avatar, TextField, Button, Typography, Link, Toolbar } fro
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Cookies from 'js-cookie'
 export default function UniversitySearchByName() {
     const paperStyle = { padding: 20, height: '12vh', width: 1080, margin: "100px auto" }
     const paperStyle1 = { padding: 20, height: '50vh', width: 1080, margin: "10px auto" }
@@ -20,8 +21,9 @@ export default function UniversitySearchByName() {
     const buttonStyle = { margin: '8px 0' }
     const [name, setName] = useState("")
     const [list, setList] = useState([])
+    const token = Cookies.get('token')
     async function getData(name) {
-        const allData = await axios.get(`http://localhost:9000/university/searchbyname/${name}`)
+        const allData = await axios.get(`http://localhost:9000/university/searchbyname/${name}`,{ headers: {"Authorization" : `Bearer ${token}`}})
         // console.log(allData.data)
         setList(allData.data)     
         console.log(allData.data)   

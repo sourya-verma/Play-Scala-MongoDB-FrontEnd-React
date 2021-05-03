@@ -1,7 +1,9 @@
 
-import React, { useState } from 'react'
+import React, { useContext, useState, } from 'react'
 import axios from 'axios'
+import Cookies from 'js-cookie'
 import { Grid, Paper, Avatar, TextField, Button, Typography, Link, Toolbar } from '@material-ui/core'
+import { useHistory } from 'react-router'
 export default function StudentSearchByName() {
     const paperStyle = { padding: 20, height: '12vh', width: 1080, margin: "100px auto" }
     const paperStyle1 = { padding: 20, height: '50vh', width: 1080, margin: "10px auto" }
@@ -16,8 +18,17 @@ export default function StudentSearchByName() {
     const buttonStyle = { margin: '8px 0' }
     const [name, setName] = useState("")
     const [list, setList] = useState([])
+    const his = useHistory()
+    const token = Cookies.get('token')
+    if (!token) {
+    
+
+        his.push('./');
+        // <Redirect to = './' />
+      }
+
     async function getData(name) {
-        const allData = await axios.get(`http://localhost:9000/student/searchbyname/${name}`)
+        const allData = await axios.get(`http://localhost:9000/student/searchbyname/${name}`,{ headers: {"Authorization" : `Bearer ${token}`} })
         // console.log(allData.data)
         setList(allData.data)     
         console.log(allData.data)   

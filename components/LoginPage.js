@@ -1,20 +1,36 @@
-import React,{useState} from 'react'
+import React,{useState, useContext, useEffect} from 'react'
 import axios from 'axios'
 import { useHistory } from 'react-router-dom'
+import Cookies from 'js-cookie'
 import { Grid, Paper, Avatar, TextField, Button, Typography, Link } from '@material-ui/core'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import AuthApi from '../AuthApi'
  const  LoginPage = (props) =>{
     const paperStyle = { padding: 20, height: '60vh', width: 380, margin: "100px auto" }
     const avatarStyle = { backgroundColor: '#1bbd7e' }
     const buttonStyle = {margin:'8px 0'}
+
+    const token  = Cookies.get("token")
+    const Auth = useContext(AuthApi)
     const his = useHistory()
     const [userCredID, setuserID] = useState("")
     const [userCredPass, setuserPass] = useState("")
+    useEffect(() => {
+        if(token)
+        {
+            console.log('11111')
+            his.push('./student')
+        }
+        else{
+            console.log('222222')
+        }
+        
+    }, [])
     const login = ()=>{
         axios.post("http://localhost:9000/user/validate",{
-            userID : userCredID,
+            _id : parseInt(userCredID),
             password:userCredPass
 
         }).then((res)=>{
@@ -24,18 +40,14 @@ import Checkbox from '@material-ui/core/Checkbox';
                 his.push('./')
             }
             else{
-                props.nameMethod(res.data.firstName)
-                props.auth();
-                console.log(res.data.firstName)
+                
+                Cookies.set("token", res.data.token, { expires: 7 })
+                Auth.setAuth(true)
                 his.push('./student')
             }
-            // res.data ? render(
-            //     <BrowserRouter>
-            //         <Main1 prop = {history.push('./student')}/>
-            //     </BrowserRouter>
-                
-            // ):console.log("login falied");
         })
+        
+        
     }
     return (
         <Grid>

@@ -1,21 +1,24 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 // import Student from './Student'
 // import University from './University'
 import { NavLink } from "react-router-dom";
 import { Container, Typography, AppBar, Toolbar, Button } from '@material-ui/core'
 import './index.css'
+import AuthApi from './AuthApi'
+import AfterLogin from './AfterLogin'
+import BeforeLogin from './BeforeLogin';
 export default function Main(props) {
+    const Auth = useContext(AuthApi)
+    useEffect(() => {
+        
+    }, [])
     return (
 
         <Container >
             <AppBar>
                 <Toolbar>
                     <Typography variant="h6" style={{ flexGrow: 1 }}>Home</Typography>
-                    <Button color='inherit'><NavLink className="inactive" activeClassName="active" exact to="/student">Student </NavLink></Button>
-                    <Button color='inherit'><NavLink className="inactive" activeClassName="active" exact to="/university">University</NavLink></Button>
-                    <Button color='inherit'><NavLink className="inactive" activeClassName="active" exact to="/studentsearchby">Search_Student_By_Name</NavLink></Button>
-                    <Button color='inherit'><NavLink className="inactive" activeClassName="active" exact to="/universitysearchby">Search_University_by_Name</NavLink></Button>
-                    <Button color='inherit'><NavLink className="inactive" activeClassName="active" exact to="/studentjoinuniversity">Student_Join_University</NavLink></Button>
+                    {Auth.auth ? <AfterLogin/>: <BeforeLogin/>}
                 </Toolbar>
             </AppBar>
         </Container>

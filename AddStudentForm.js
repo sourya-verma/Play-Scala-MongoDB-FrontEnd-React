@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import './index.css'
 import "bootstrap/dist/css/bootstrap.css";
+import Cookies from 'js-cookie'
 const AddForm = (props) => {
 
+
+    const token = Cookies.get('token')
     const validateUniversity = function (name) {
         if (name === null || name === "") {
 
@@ -54,6 +57,7 @@ const AddForm = (props) => {
                     await fetch('http://localhost:9000/student/create', {
                         method: 'post',
                         headers: {
+                            "Authorization" : `Bearer ${token}`,
                             'Accept': 'application/json',
                             'Content-type': 'application/json'
                         },
